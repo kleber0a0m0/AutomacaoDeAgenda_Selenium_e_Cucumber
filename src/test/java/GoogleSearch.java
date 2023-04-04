@@ -17,7 +17,7 @@ public class GoogleSearch {
             driver.get("https://www.google.com");
             driver.findElement(By.cssSelector("[name='q'")).sendKeys("Ada tech");
 
-            
+
         } finally {
             driver.quit();
         }
