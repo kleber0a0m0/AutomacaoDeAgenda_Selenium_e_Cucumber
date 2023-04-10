@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,19 +14,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MovieTest {
 
-    private WebDriver driver;
+    private static WebDriver driver;
     private String movieTitle = "Selenium test";
 
-    @BeforeEach
-    public void setup() {
+    @BeforeAll
+    public static void setup() {
         WebDriverManager.chromedriver().setup();
-        this.driver = new ChromeDriver(
+        driver = new ChromeDriver(
                 new ChromeOptions().addArguments("--remote-allow-origins=*")
         );
     }
 
-    @AfterEach
-    public void destroy() {
+    @AfterAll
+    public static void destroy() {
         driver.quit();
     }
 
