@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -98,6 +99,21 @@ public class MovieTest {
     }
 
     @Test
+    public void cadastrarFilmeComNotaMaiorQue10_naoPermitido() {
+        driver.get("http://localhost:8080/app/movies");
+
+        driver.findElement(By.xpath("/html/body/div/div/div/div[2]/a")).click();
+
+        driver.findElement(By.id("title")).sendKeys("Uma comédia");
+        driver.findElement(By.id("genre")).sendKeys("Comédia");
+        driver.findElement(By.id("rating")).sendKeys("11");
+        driver.findElement(By.xpath("//form/button")).click();
+
+        String message = driver.findElement(By.id("rating")).getAttribute("validationMessage");
+        assertEquals("Value must be less than or equal to 10.", message);
+    }
+
+    @Test
     @Order(2)
     public void listarFilmesCadastrados_encontrarSeleniumTest() {
         driver.get("http://localhost:8080/app/movies");
@@ -106,6 +122,12 @@ public class MovieTest {
                 By.xpath("//*[text()='" + movieTitle + "']")
         );
         assertNotNull(element);
+    }
+
+    @Test
+    @Order(2)
+    public void editarUmFilmeJaCadastrado() {
+
     }
 
 }
