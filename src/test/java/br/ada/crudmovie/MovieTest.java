@@ -4,13 +4,13 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MovieTest {
@@ -146,6 +146,21 @@ public class MovieTest {
                 By.xpath("//td[text()='" + movieTitle + "']")
         );
         assertNotNull(movieElement);
+    }
+
+    @Test
+    @Order(4)
+    public void deletarUmFilmeCadastrado() {
+        driver.get("http://localhost:8080/app/movies");
+
+        WebElement deleteElement = driver.findElement(
+                By.xpath("//td[text()='" + movieTitle + "']/following-sibling::td/a[text()='Delete']")
+        );
+        deleteElement.click();
+
+        assertThrows(NoSuchElementException.class, () ->
+                driver.findElement(By.xpath("//td[text()='" + movieTitle + "']"))
+        );
     }
 
 }
