@@ -1,6 +1,7 @@
 package br.ada.crudmovie;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class MovieTest {
 
     private static WebDriver driver;
-    private String movieTitle = "Selenium test";
+    private static String movieTitle;
 
     @BeforeAll
     public static void setup() {
@@ -23,6 +24,7 @@ public class MovieTest {
         driver = new ChromeDriver(
                 new ChromeOptions().addArguments("--remote-allow-origins=*")
         );
+        movieTitle = RandomStringUtils.randomAlphabetic(15);
     }
 
     @AfterAll
@@ -38,8 +40,8 @@ public class MovieTest {
         driver.findElement(By.xpath("/html/body/div/div/div/div[2]/a")).click();
 
         driver.findElement(By.id("title")).sendKeys(movieTitle);
-        driver.findElement(By.id("genre")).sendKeys("Horror");
-        driver.findElement(By.id("rating")).sendKeys("10");
+        driver.findElement(By.id("genre")).sendKeys(RandomStringUtils.randomAlphabetic(10));
+        driver.findElement(By.id("rating")).sendKeys(RandomStringUtils.randomNumeric(1));
         driver.findElement(By.xpath("//form/button")).click();
 
         WebElement element = driver.findElement(
@@ -54,11 +56,12 @@ public class MovieTest {
 
         driver.findElement(By.xpath("/html/body/div/div/div/div[2]/a")).click();
 
-        driver.findElement(By.id("title")).sendKeys("O auto da compadecida");
-        driver.findElement(By.id("rating")).sendKeys("10");
+        String title = RandomStringUtils.randomAlphabetic(15);
+        driver.findElement(By.id("title")).sendKeys(title);
+        driver.findElement(By.id("rating")).sendKeys(RandomStringUtils.randomNumeric(1));
         driver.findElement(By.xpath("//form/button")).click();
         WebElement element = driver.findElement(
-                By.xpath("//*[text()='O auto da compadecida']")
+                By.xpath("//*[text()='" + title + "']")
         );
         assertNotNull(element);
     }
@@ -124,9 +127,25 @@ public class MovieTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     public void editarUmFilmeJaCadastrado() {
+        driver.get("http://localhost:8080/app/movies");
 
+        WebElement editElement = driver.findElement(
+                By.xpath("//td[text()='" + movieTitle + "']/following-sibling::td/a[text()='Edit']")
+        );
+        editElement.click();
+
+        movieTitle = RandomStringUtils.randomAlphabetic(20);
+        WebElement titleElement = driver.findElement(By.id("title"));
+        titleElement.clear();
+        titleElement.sendKeys(movieTitle);
+        driver.findElement(By.xpath("//form/button")).click();
+
+        WebElement movieElement = driver.findElement(
+                By.xpath("//td[text()='" + movieTitle + "']")
+        );
+        assertNotNull(movieElement);
     }
 
 }
