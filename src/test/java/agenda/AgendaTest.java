@@ -1,5 +1,6 @@
 package agenda;
 
+import io.cucumber.java.en.Given;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
@@ -32,10 +33,10 @@ public class AgendaTest {
         userName = RandomStringUtils.randomAlphabetic(10);
     }
 
-//    @AfterAll
-//    public static void destroy() {
-//        driver.quit();
-//    }
+    @AfterAll
+    public static void destroy() {
+        driver.quit();
+    }
 
 
     @Test
@@ -152,7 +153,5 @@ public class AgendaTest {
         System.out.println((usernameField.getAttribute("readonly")));
         assertTrue(usernameField.getAttribute("readonly").equals("true"));
     }
-
-
 
 }
